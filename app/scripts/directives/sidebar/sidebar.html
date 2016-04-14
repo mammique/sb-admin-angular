@@ -4,21 +4,21 @@
             <sidebar-search></sidebar-search>
             <li ui-sref-active="active" ng-repeat="menuItem in menu" ng-class="{expand: collapseVar==$index}">
                 <!--First Level Item-->
-                <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}"><i class="fa {{menuItem.icon}} fa-fw"></i> {{menuItem.name}}</a>
+                <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}"><i class="fa {{menuItem.icon}} fa-fw"></i> {{menuItem.title}}</a>
 
-                <a style="background-color:transparent" ng-if="menuItem.children" href="" ng-click="check($index)"><i class="fa {{menuItem.icon}} fa-fw"></i> {{menuItem.name}}<span
+                <a style="background-color:transparent" ng-if="menuItem.children" href="" ng-click="check($index)"><i class="fa {{menuItem.icon}} fa-fw"></i> {{menuItem.title}}<span
                         class="fa arrow"></span></a>
                 <ul ng-if="menuItem.children" class="nav nav-second-level" uib-collapse="collapseVar!=$index">
                     <li ui-sref-active="active" ng-repeat="menuItem in menuItem.children" ng-class="{expand: multiCollapseVar==$index}">
                         <!--Second Level Item-->
-                        <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}">{{menuItem.name}}</a>
+                        <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}">{{menuItem.title}}</a>
 
-                        <a style="background-color:transparent" ng-if="menuItem.children" href="" ng-click="multiCheck($index)"> {{menuItem.name}}<span
+                        <a style="background-color:transparent" ng-if="menuItem.children" href="" ng-click="multiCheck($index)"> {{menuItem.title}}<span
                                 class="fa arrow"></span></a>
                         <ul ng-if="menuItem.children" class="nav nav-third-level" uib-collapse="multiCollapseVar!=$index">
                             <li ui-sref-active="active" ng-repeat="menuItem in menuItem.children">
                                 <!--Third Level Item-->
-                                <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}">{{menuItem.name}}</a>
+                                <a ng-if="!menuItem.children" ui-sref="{{menuItem.sref}}">{{menuItem.title}}</a>
                             </li>
                         </ul>
                     </li>

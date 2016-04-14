@@ -3,83 +3,83 @@ var layout = {
     [
       {
         sref: 'dashboard.home',
-        name: 'Dashboard',
+        title: 'Dashboard',
         icon: 'fa-dashboard'
       },
       {
         sref: 'dashboard.chart',
-        name: 'Charts',
+        title: 'Charts',
         icon: 'fa-bar-chart-o'
       },
       {
         sref: 'dashboard.table',
-        name: 'Tables',
+        title: 'Tables',
         icon: 'fa-table'
       },
       {
         sref: 'dashboard.form',
-        name: 'Forms',
+        title: 'Forms',
         icon: 'fa-edit'
       },
       {
-        name: 'UI Elements',
+        title: 'UI Elements',
         icon: 'fa-wrench',
         children: [
           {
-            name: 'Panels and Wells',
+            title: 'Panels and Wells',
             sref: 'dashboard.panels-wells'
           },
           {
-            name: 'Buttons',
+            title: 'Buttons',
             sref: 'dashboard.buttons'
           },
           {
-            name: 'Notifications',
+            title: 'Notifications',
             sref: 'dashboard.notifications'
           },
           {
-            name: 'Typography',
+            title: 'Typography',
             sref: 'dashboard.typography'
           },
           {
-            name: 'Icons',
+            title: 'Icons',
             sref: 'dashboard.icons'
           },
           {
-            name: 'Grid',
+            title: 'Grid',
             sref: 'dashboard.grid'
           },
         ]
       },
       {
-        name: 'Multi-Level Dropdown',
+        title: 'Multi-Level Dropdown',
         icon: 'fa-sitemap',
         children: [
           {
-            name: 'Panels and Wells',
+            title: 'Panels and Wells',
             sref: 'dashboard.panels-wells'
           },
           {
-            name: 'Buttons',
+            title: 'Buttons',
             sref: 'dashboard.buttons'
           },
           {
-            name: 'Third Level',
+            title: 'Third Level',
             children: [
               {
-                name: 'Notifications',
+                title: 'Notifications',
                 sref: 'dashboard.notifications'
               },
               {
-                name: 'Typography',
+                title: 'Typography',
                 sref: 'dashboard.typography'
               },
               {
-                name: 'Icons',
+                title: 'Icons',
                 sref: 'dashboard.icons'
               },
               {
-                name: 'Grid',
+                title: 'Grid',
                 sref: 'dashboard.grid'
               },
             ]
@@ -88,18 +88,36 @@ var layout = {
         ]
       },
       {
-        name: 'Sample Pages',
+        title: 'Sample Pages',
         icon: 'fa-files-o',
         children: [
           {
-            name: 'Blank Page',
+            title: 'Blank Page',
             sref: 'dashboard.blank'
           },
           {
-            name: 'Login Page',
+            title: 'Login Page',
             sref: 'login'
           },
         ]
       },
-    ]
+    ],
+  pages: {
+    'User': {
+      title: 'User',
+      resource: '/',
+      fields: [
+        {
+          name: 'firstName',
+          title: '名',
+          type: 'string',
+        },
+        {
+          name: 'familyName',
+          title: '姓',
+          type: 'string',
+        }
+      ]
+    }
+  }
 }
