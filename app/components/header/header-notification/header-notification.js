@@ -9,7 +9,7 @@
 angular.module('sbAdminApp')
 	.directive('headerNotification',function(){
 		return {
-        templateUrl:'scripts/directives/header/header-notification/header-notification.html',
+        templateUrl:'components/header/header-notification/header-notification.html',
         restrict: 'E',
         replace: true,
     	}

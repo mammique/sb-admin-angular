@@ -31,17 +31,17 @@ angular
     $stateProvider
       .state('dashboard', {
         url:'/dashboard',
-        templateUrl: 'views/dashboard/main.html',
+        templateUrl: 'pages/main.html',
         resolve: {
             loadMyDirectives:function($ocLazyLoad){
                 return $ocLazyLoad.load(
                 {
                     name:'sbAdminApp',
                     files:[
-                    'scripts/directives/header/header.js',
-                    'scripts/directives/header/header-notification/header-notification.js',
-                    'scripts/directives/sidebar/sidebar.js',
-                    'scripts/directives/sidebar/sidebar-search/sidebar-search.js'
+                    'components/header/header.js',
+                    'components/header/header-notification/header-notification.js',
+                    'components/sidebar/sidebar.js',
+                    'components/sidebar/sidebar-search/sidebar-search.js'
                     ]
                 })
             }
@@ -50,36 +50,36 @@ angular
       .state('dashboard.home',{
         url:'/home',
         controller: 'MainCtrl',
-        templateUrl:'views/dashboard/home.html',
+        templateUrl:'pages/main/home.html',
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'scripts/controllers/main.js',
-              'scripts/directives/timeline/timeline.js',
-              'scripts/directives/notifications/notifications.js',
-              'scripts/directives/chat/chat.js',
-              'scripts/directives/dashboard/stats/stats.js'
+              'pages/main.js',
+              'components/timeline/timeline.js',
+              'components/notifications/notifications.js',
+              'components/chat/chat.js',
+              'components/dashboard/stats/stats.js'
               ]
             })
           }
         }
       })
       .state('dashboard.form',{
-        templateUrl:'views/form.html',
+        templateUrl:'pages/main/form.html',
         url:'/form'
     })
       .state('dashboard.blank',{
-        templateUrl:'views/pages/blank.html',
+        templateUrl:'pages/main/blank.html',
         url:'/blank'
     })
       .state('login',{
-        templateUrl:'views/pages/login.html',
+        templateUrl:'pages/login.html',
         url:'/login'
     })
       .state('dashboard.chart',{
-        templateUrl:'views/chart.html',
+        templateUrl:'pages/main/chart.html',
         url:'/chart',
         controller:'ChartCtrl',
         resolve: {
@@ -93,37 +93,37 @@ angular
             }),
             $ocLazyLoad.load({
                 name:'sbAdminApp',
-                files:['scripts/controllers/chartContoller.js']
+                files:['pages/main/chart.js']
             })
           }
         }
     })
       .state('dashboard.table',{
-        templateUrl:'views/table.html',
+        templateUrl:'pages/main/table.html',
         url:'/table'
     })
       .state('dashboard.panels-wells',{
-          templateUrl:'views/ui-elements/panels-wells.html',
+          templateUrl:'pages/main/ui-elements/panels-wells.html',
           url:'/panels-wells'
       })
       .state('dashboard.buttons',{
-        templateUrl:'views/ui-elements/buttons.html',
+        templateUrl:'pages/main/ui-elements/buttons.html',
         url:'/buttons'
     })
       .state('dashboard.notifications',{
-        templateUrl:'views/ui-elements/notifications.html',
+        templateUrl:'pages/main/ui-elements/notifications.html',
         url:'/notifications'
     })
       .state('dashboard.typography',{
-       templateUrl:'views/ui-elements/typography.html',
+       templateUrl:'pages/main/ui-elements/typography.html',
        url:'/typography'
    })
       .state('dashboard.icons',{
-       templateUrl:'views/ui-elements/icons.html',
+       templateUrl:'pages/main/ui-elements/icons.html',
        url:'/icons'
    })
       .state('dashboard.grid',{
-       templateUrl:'views/ui-elements/grid.html',
+       templateUrl:'pages/main/ui-elements/grid.html',
        url:'/grid'
    })
   }]);
