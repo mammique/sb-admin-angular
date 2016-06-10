@@ -1,0 +1,187 @@
+{
+    "common": {
+        "title": "Entrepreneur"
+    },
+    "menu": [
+        {
+            "page": {
+                "pageId": "shops"
+            },
+            "title": "Shop",
+            "icon": "fa-building"
+        },
+        {
+            "page": {
+                "pageId": "clients"
+            },
+            "title": "Client",
+            "icon": "fa-users"
+        }
+    ],
+    "tables": {
+        "client": {
+            "title": "Client",
+            "primaryKey": "clientId",
+            "listPage": "clients",
+            "recordPage": "client",
+            "stringifyKey": "fullName",
+            "fields": [
+                {
+                    "name": "clientId",
+                    "title": "ClientID",
+                    "type": "id",
+                    "readonly": true
+                },
+                {
+                    "name": "firstName",
+                    "title": "First Name",
+                    "type": "string"
+                },
+                {
+                    "name": "familyName",
+                    "title": "Family Name",
+                    "type": "string"
+                },
+                {
+                    "name": "fullName",
+                    "title": "Full Name",
+                    "type": "calc",
+                    "stringify": "record.familyName + ' ' + record.firstName;"
+                }
+            ],
+            "records": [
+                {
+                    "clientId": 1001,
+                    "familyName": "Ross",
+                    "firstName": "Diana "
+                },
+                {
+                    "clientId": 1002,
+                    "familyName": "Monroe",
+                    "firstName": "Marilyn"
+                }
+            ]
+        },
+        "shop": {
+            "title": "Shop",
+            "stringifyKey": "shop_name",
+            "primaryKey": "shop_code",
+            "listPage": "shops",
+            "recordPage": "shop",
+            "fields": [
+                {
+                    "name": "shop_code",
+                    "title": "Shop Code",
+                    "type": "string"
+                },
+                {
+                    "name": "shop_name",
+                    "title": "Shop Name",
+                    "type": "string"
+                }
+            ],
+            "records": [
+                {
+                    "shop_code": "A01",
+                    "shop_name": "San Francisco"
+                },
+                {
+                    "shop_code": "A02",
+                    "shop_name": "New York"
+                }
+            ]
+        }
+    },
+    "pages": {
+        "shops": {
+            "type": "list",
+            "table": "shop",
+            "fields": [
+                "shop_code",
+                "shop_name"
+            ],
+            "recordActions": [
+                {
+                    "title": "Edit",
+                    "type": "link",
+                    "link": "shop"
+                }
+            ],
+            "pageActions": [
+                {
+                    "title": "Create",
+                    "type": "link",
+                    "link": "shop"
+                }
+            ]
+        },
+        "shop": {
+            "type": "record",
+            "table": "shop",
+            "fieldGroups": [
+                {
+                    "fields": [
+                        "shop_code",
+                        "shop_name"
+                    ]
+                }
+            ],
+            "pageActions": [
+                {
+                    "title": "Save",
+                    "type": "save"
+                }
+            ]
+        },
+        "client": {
+            "title": "Client",
+            "table": "client",
+            "type": "complex",
+            "children": [
+                {
+                    "type": "record",
+                    "table": "client",
+                    "fieldGroups": [
+                        {
+                            "title": "information",
+                            "fields": [
+                                "clientId",
+                                "firstName",
+                                "familyName"
+                            ]
+                        }
+                    ],
+                    "pageActions": [
+                        {
+                            "title": "Save",
+                            "type": "save"
+                        }
+                    ]
+                }
+            ]
+        },
+        "clients": {
+            "title": "Client",
+            "type": "list",
+            "table": "client",
+            "fields": [
+                "clientId",
+                "fullName"
+            ],
+            "recordActions": [
+                {
+                    "title": "Edit",
+                    "type": "link",
+                    "link": "client"
+                }
+            ],
+            "pageActions": [
+                {
+                    "title": "Create",
+                    "type": "link",
+                    "link": "client"
+                }
+            ]
+        }
+    }
+}

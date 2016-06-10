@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc directive
  * @name izzyposWebApp.directive:adminPosHeader
@@ -7,12 +6,12 @@
  * # adminPosHeader
  */
 angular.module('sbAdminApp')
-	.directive('headerNotification',function(){
-		return {
-        templateUrl:'components/header/header-notification/header-notification.html',
+    .directive('headerNotification', function () {
+    return {
+        templateUrl: 'components/header/header-notification/header-notification.html',
         restrict: 'E',
         replace: true,
-    	}
-	});
+    };
+});
 
-
+//# sourceMappingURL=header-notification.js.map

@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * @ngdoc directive
  * @name izzyposWebApp.directive:adminPosHeader
@@ -6,8 +7,8 @@
  * # adminPosHeader
  */
 angular.module('sbAdminApp')
-    .component('notifications', {
-    templateUrl: 'components/notifications/notifications.html',
-});
+	.component('notifications',{
+		templateUrl:'components/notifications/notifications.html',
+	});
 
-//# sourceMappingURL=notifications.js.map
+
