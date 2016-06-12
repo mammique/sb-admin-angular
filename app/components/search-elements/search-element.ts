@@ -9,7 +9,12 @@ angular.module('sbAdminApp')
             },
             link: function(scope:any, element){
                 scope.$watch('type', function(){
-                    let type = scope.param.elementType || scope.param.type;
+                    if(scope.param.type === 'chain' && scope.param.forceEdittable) {
+                        scope.effectiveParam = scope.param.chains.slice(-1)[0].field;
+                    }else {
+                        scope.effectiveParam = scope.param;
+                    }
+                    let type = scope.effectiveParam.elementType || scope.effectiveParam.type;
                     if(scope['param'].error) {
                         type = 'error';
                     }
@@ -22,12 +27,12 @@ angular.module('sbAdminApp')
                         'range': ['._$gte', '._$lt'],
                         'default': ['']
                     };
-                    const conditionTypes = conditionTypesMap[scope.param.searchType] || conditionTypesMap['default'];
+                    const conditionTypes = conditionTypesMap[scope.effectiveParam.searchType] || conditionTypesMap['default'];
                     const componentName = 'input-' + type;
-                    const multi = scope.param.searchType === 'multi';
+                    const multi = scope.effectiveParam.searchType === 'multi';
                     const template = conditionTypes.map((conditionType)=> {
                         return `
-                            <${componentName} value="condition[param.name]${conditionType}" param="param"></${componentName}>
+                            <${componentName} value="condition[effectiveParam.name]${conditionType}" param="effectiveParam"></${componentName}>
                         `;
                     }).join('');
                     const contents:any = angular.element(template);

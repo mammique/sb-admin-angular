@@ -538,10 +538,10 @@ function parseSchema(Schema) {
                 }];
             }
             this.searches = this.searches && this.searches.length && this.searches.map((field)=> {
-                return Field.create(field, this.table, true, true);
+                return Object.assign(Field.create(field, this.table, true, false), {forceEdittable: true});
             }) || null;
             this.sammaries = this.sammaries && this.sammaries.length && this.sammaries.map((field)=> {
-                return Field.create(field, this.table, true, true);
+                return Object.assign(Field.create(field, this.table, true, false), {forceEdittable: true});
             }) || null;
         }
         static $postLink() {
