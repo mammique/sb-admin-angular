@@ -12,15 +12,20 @@ angular.module('sbAdminApp')
                     if (!type || scope['param'].error) {
                         type = 'error';
                     }
-                    const componentName = 'input-' + type;
+                    const componentName = 'input-' + camelToSnake(type);
                     const template = `
                         <${componentName} value="value" param="param" record="record"></${componentName}>
                     `;
                     const contents: any = angular.element(template);
                     $compile(contents)(scope);
                     element.html(contents);
-                // scope.$watch('type', function (type) {
-                // });
+                    function camelToSnake(p){
+                        return p.replace(/([A-Z])/g,
+                                function(s) {
+                                    return '_' + s.charAt(0).toLowerCase();
+                                }
+                        );
+                    };
             }
         };
     })
@@ -63,6 +68,15 @@ angular.module('sbAdminApp')
     .component('inputString', {
         template: `
            <input type="text" ng-model="$ctrl.value" class="form-control" ng-disabled="$ctrl.param.readonly" >
+        `,
+        bindings: {
+            value: '=',
+            param: '<',
+        }
+    })
+    .component('inputMultiString', {
+        template: `
+           <textarea ng-model="$ctrl.value" class="form-control" ng-disabled="$ctrl.param.readonly" ></textarea>
         `,
         bindings: {
             value: '=',
