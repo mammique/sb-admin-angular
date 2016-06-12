@@ -23,13 +23,12 @@ angular.module('sbAdminApp')
                         'suffix': ['._$suffix._$search'],
                         'prefix': ['._$prefix._$search'],
                         'exact': [''],
-                        'multi': [''],// 実際には_$inだが、未対応のため。
+                        'multi': ['._$in'],
                         'range': ['._$gte', '._$lt'],
                         'default': ['']
                     };
                     const conditionTypes = conditionTypesMap[scope.effectiveParam.searchType] || conditionTypesMap['default'];
-                    const componentName = 'input-' + type;
-                    const multi = scope.effectiveParam.searchType === 'multi';
+                    const componentName = 'input-' + type + (scope.effectiveParam.searchType === 'multi' ? '-multi': '';
                     const template = conditionTypes.map((conditionType)=> {
                         return `
                             <${componentName} value="condition[effectiveParam.name]${conditionType}" param="effectiveParam"></${componentName}>
