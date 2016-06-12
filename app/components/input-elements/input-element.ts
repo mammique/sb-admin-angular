@@ -8,24 +8,24 @@ angular.module('sbAdminApp')
                 type: '<',
             },
             link: function (scope:any, element) {
-                    let type = scope.param.elementType || scope.param.type;
-                    if (!type || scope['param'].error) {
-                        type = 'error';
-                    }
-                    const componentName = 'input-' + camelToSnake(type);
-                    const template = `
-                        <${componentName} value="value" param="param" record="record"></${componentName}>
-                    `;
-                    const contents: any = angular.element(template);
-                    $compile(contents)(scope);
-                    element.html(contents);
-                    function camelToSnake(p){
-                        return p.replace(/([A-Z])/g,
-                                function(s) {
-                                    return '_' + s.charAt(0).toLowerCase();
-                                }
-                        );
-                    };
+                let type = scope.param.elementType || scope.param.type;
+                if (!type || scope['param'].error) {
+                    type = 'error';
+                }
+                const componentName = 'input-' + camelToSnake(type);
+                const template = `
+                    <${componentName} value="value" param="param" record="record"></${componentName}>
+                `;
+                const contents: any = angular.element(template);
+                $compile(contents)(scope);
+                element.html(contents);
+                function camelToSnake(p){
+                    return p.replace(/([A-Z])/g,
+                            function(s) {
+                                return '_' + s.charAt(0).toLowerCase();
+                            }
+                    );
+                };
             }
         };
     })
