@@ -1,9 +1,5 @@
 declare var moment;
 
-moment.today = function () {
-    return moment().startOf('day');
-};
-
 angular.module('sbAdminApp')
     .service('Schema', class Schema {
         $promise;
