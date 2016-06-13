@@ -227,7 +227,8 @@ function parseSchema(Schema) {
                 }
                 this.defaultValue = () => {
                     try {
-                        return item.defaultValue(Schema.common.profile, system);
+                        const value = item.defaultValue(Schema.common.profile, system);
+                        return value instanceof moment ? value.toDate(): value;
                     } catch (e) {
                         console.error(e);
                         return null;
