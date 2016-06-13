@@ -29,6 +29,10 @@ angular.module('sbAdminApp')
                     };
                     const conditionTypes = conditionTypesMap[scope.effectiveParam.searchType] || conditionTypesMap['default'];
                     const componentName = 'input-' + type + (scope.effectiveParam.searchType === 'multi' ? '-multi': '';
+                    if(scope.effectiveParam.defaultValue && conditionTypes[0] === '') {
+                        debugger;
+                        scope.condition[scope.effectiveParam.name] = scope.effectiveParam.defaultValue();
+                    }
                     const template = conditionTypes.map((conditionType)=> {
                         return `
                             <${componentName} value="condition[effectiveParam.name]${conditionType}" param="effectiveParam"></${componentName}>

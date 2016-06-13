@@ -1,6 +1,6 @@
 declare var moment;
 
-moment.today = function(){
+moment.today = function () {
     return moment().startOf('day');
 };
 
@@ -85,6 +85,14 @@ function parseSchema(Schema) {
         });
         return map;
     }
+    const system = new class System {
+        today() {
+            return moment().startOf('day');
+        }
+        now() {
+            return moment();
+        }
+    };
 
     class Menu {
         children;
@@ -130,6 +138,7 @@ function parseSchema(Schema) {
         searchType;
         searchTypeMulti: boolean;
         elementType;
+        defaultValue;
         static create(param, table, requireReference = false, requireInstance = false) {
             if (typeof param === 'string') {
                 const fieldElements = param.split('.');
@@ -160,46 +169,68 @@ function parseSchema(Schema) {
                         error: errorMessage
                     };
                 }
-                if(requireInstance && (field.type === 'calc' || field.type === 'chain')){
+                if (requireInstance && (field.type === 'calc' || field.type === 'chain')) {
                     const errorMessage = `${field.type}フィールドは使えません`;
-                    console.log(errorMessage);
-                    return Object.assign(param, {
-                            error: errorMessage
-                        });
-                }
-                return field;
-            } else if (param.field) {
-                const base = Field.create(param.field, table, false, requireInstance);
-                if(base.error) {
-                    return Object.assign(param, base);
-                }else {
-                    return new Field(Object.assign({}, base, param), table);
-                }
-            } else if(!requireReference) {
-                return new Field(param, table);
-            } else {
-                const errorMessage = `fieldが指定されていません`;
                     console.log(errorMessage);
                     return Object.assign(param, {
                         error: errorMessage
                     });
+                }
+                return field;
+            } else if (param.field) {
+                const base = Field.create(param.field, table, false, requireInstance);
+                if (base.error) {
+                    return Object.assign(param, base);
+                } else {
+                    return new Field(Object.assign({}, base, param), table);
+                }
+            } else if (!requireReference) {
+                return new Field(param, table);
+            } else {
+                const errorMessage = `fieldが指定されていません`;
+                console.log(errorMessage);
+                return Object.assign(param, {
+                    error: errorMessage
+                });
             }
+        }
+        static defaultValue(fields) {
+            const response = {};
+            fields.forEach((field) => {
+                if (field.defaultValue) {
+                    response[field.name] = field.defaultValue();
+                }
+            });
+            return response;
         }
         constructor(item, public table: Table) {
             Field.fields.push(this);
             Object.assign(this, Field.fieldDefault[item.type], item);
-            if(!this.type) {
+            if (!this.type) {
                 this.error = 'typeが指定されていません';
             }
             if (item.stringify) {
                 if (typeof item.stringify !== 'function') {
-                    item.stringify = new Function('record', 'fields', 'return ' + item.stringify);
+                    item.stringify = new Function('record', 'fields', 'system', 'return ' + item.stringify);
                 }
                 this.stringify = (record) => {
                     try {
-                        return record && item.stringify(record, this.table.fieldMap);
+                        return record && item.stringify(record, this.table.fieldMap, system);
                     } catch (e) {
                         return e.toString();
+                    }
+                };
+            }
+            if (item.defaultValue) {
+                if (typeof item.defaultValue !== 'function') {
+                    item.defaultValue = new Function('profile', 'system', 'return ' + item.defaultValue);
+                }
+                this.defaultValue = () => {
+                    try {
+                        return item.defaultValue(Schema.common.profile, system);
+                    } catch (e) {
+                        console.error(e);
+                        return null;
                     }
                 };
             }
@@ -222,7 +253,7 @@ function parseSchema(Schema) {
                 };
                 this.searchType = searchTypeConversionMap[searchTypeMatch[1]];
             }
-            if(!this.searchType) {
+            if (!this.searchType) {
                 const defaultSearchTypeMap = {
                     'string': 'partial',
                     'integer': 'exact',
@@ -327,9 +358,9 @@ function parseSchema(Schema) {
             }
             if (!record) {
                 return null;
-            } else if(this.type === 'date') {
+            } else if (this.type === 'date') {
                 return moment(record[this.name]).format('YYYY-MM-DD');
-            } else if(this.type === 'datetime') {
+            } else if (this.type === 'datetime') {
                 return moment(record[this.name]).format('YYYY-MM-DD HH:mm:ss');
             } else if (this.type === 'reference') {
                 return this.referenceTable.stringify(this.idToItem(record[this.name]));
@@ -396,14 +427,14 @@ function parseSchema(Schema) {
             } else {
                 this.recordMap = {};
             }
-            this.records.forEach((record)=> {
-                this.fields.forEach((field)=> {
-                    if(field.type === 'integer' || field.type === 'id') {
+            this.records.forEach((record) => {
+                this.fields.forEach((field) => {
+                    if (field.type === 'integer' || field.type === 'id') {
                         record[field.name] = parseInt(record[field.name], 10);
-                    }else if (field.type === 'string') {
+                    } else if (field.type === 'string') {
                         record[field.name] = '' + record[field.name];
-                    }else if (field.type === 'date' || field.type === 'datetime') {
-                        record[field.name] = new Date(record[field.name]);
+                    } else if (field.type === 'date' || field.type === 'datetime') {
+                        record[field.name] = record[field.name] && new Date(record[field.name]);
                     }
                 });
             });
@@ -426,7 +457,6 @@ function parseSchema(Schema) {
             if (!this.conditionCache[conditionString]) {
                 this.conditionCache[conditionString] = getFilterFunction(JSON.parse(conditionString));
             }
-            console.log(this.conditionCache[conditionString].toString());
             return this.records.filter(this.conditionCache[conditionString]);
         }
         get(id) {
@@ -438,6 +468,9 @@ function parseSchema(Schema) {
         $postLink() {
             this.listPage = Schema.pages[this.listPage];
             this.recordPage = Schema.pages[this.recordPage];
+        }
+        defaultValue() {
+            return Field.defaultValue(this.fields);
         }
     }
     function convertFieldArray(table, value) {
@@ -486,19 +519,23 @@ function parseSchema(Schema) {
                 return new Component(param);
             }
         }
+        extend(value) {
+            const response = Object.create(this);
+            Object.assign(response, value);
+            return response;
+        }
         constructor(item) {
             Object.assign(this, item);
             Component.components.push(this);
             if (item.decoration) {
                 if (typeof item.decoration !== 'function') {
-                    const code = Object.keys(item.decoration).map((decorationName)=> {
+                    const code = Object.keys(item.decoration).map((decorationName) => {
                         return `if(${item.decoration[decorationName]}){return '${decorationName}'}`;
                     }).join('');
-                    console.log(item.decoration, code);
-                    item.decoration = new Function('record', code);
+                    item.decoration = new Function('record', 'system', code);
                 }
                 this.decoration = function (record) {
-                    const decorationName = item.decoration(record);
+                    const decorationName = item.decoration(record, system);
                     if (decorationName) {
                         return 'record-' + decorationName;
                     } else {
@@ -513,10 +550,16 @@ function parseSchema(Schema) {
             } else {
                 return;
             }
-            this.fields = this.fields && convertFieldArray(this.table, this.fields);
+            if (this.fields) {
+                this.fields = this.fields && convertFieldArray(this.table, this.fields);
+            }
             if (this.fieldGroups && Array.isArray(this.fieldGroups)) {
+                this.fields = [];
                 this.fieldGroups.forEach((fieldGroup) => {
-                    fieldGroup.fields = convertFieldArray(this.table, fieldGroup.fields);
+                    if (fieldGroup.fields) {
+                        fieldGroup.fields = convertFieldArray(this.table, fieldGroup.fields);
+                        this.fields = this.fields.concat(fieldGroup.fields);
+                    }
                 });
             }
             if (!this.pageActions && this.table && this.type === 'record') {
@@ -537,11 +580,11 @@ function parseSchema(Schema) {
                     page: this.table.recordPage
                 }];
             }
-            this.searches = this.searches && this.searches.length && this.searches.map((field)=> {
-                return Object.assign(Field.create(field, this.table, true, false), {forceEdittable: true});
+            this.searches = this.searches && this.searches.length && this.searches.map((field) => {
+                return Object.assign(Field.create(field, this.table, true, false), { forceEdittable: true });
             }) || null;
-            this.sammaries = this.sammaries && this.sammaries.length && this.sammaries.map((field)=> {
-                return Object.assign(Field.create(field, this.table, true, false), {forceEdittable: true});
+            this.sammaries = this.sammaries && this.sammaries.length && this.sammaries.map((field) => {
+                return Object.assign(Field.create(field, this.table, true, false), { forceEdittable: true });
             }) || null;
         }
         static $postLink() {
@@ -570,6 +613,12 @@ function parseSchema(Schema) {
         }
         decoration(record) {
             //
+        }
+        defaultValue() {
+            return Field.defaultValue(this.fields);
+        }
+        defaultCondition() {
+            return Field.defaultValue(this.searches);
         }
     }
 
@@ -623,17 +672,17 @@ function parseSchema(Schema) {
             return '(' + JSON.stringify(value) + '.some(function(i){return i == o.' + key + '}))';
         },
         _$text: function (key, value) {
-            if(value && value._$search) {
+            if (value && value._$search) {
                 return '(o.' + key + '&& o.' + key + '.match(new RegExp(' + JSON.stringify(escapeRegExp(value._$search)) + ')))';
             }
         },
         _$prefix: function (key, value) {
-            if(value && value._$search) {
+            if (value && value._$search) {
                 return '(o.' + key + '&& o.' + key + '.match(new RegExp(' + JSON.stringify('^' + escapeRegExp(value._$search)) + ')))';
             }
         },
         _$suffix: function (key, value) {
-            if(value && value._$search) {
+            if (value && value._$search) {
                 return '(o.' + key + '&& o.' + key + '.match(new RegExp(' + JSON.stringify(escapeRegExp(value._$search) + '$') + ')))';
             }
         },
@@ -654,7 +703,7 @@ function parseSchema(Schema) {
             var exp = keys.map(function (key) {
                 return Object.getOwnPropertyNames(condition).map(function (operator) {
                     return condition[operator] && operatorMap[operator](key, condition[operator]);
-                }).filter((item)=>item).join('&&');
+                }).filter((item) => item).join('&&');
             }).join('||');
             return exp && ('(' + exp + ')');
         }).filter((item, index, arr) => !!item).join('&&') || 'true';

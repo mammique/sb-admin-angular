@@ -200,7 +200,7 @@ angular.module('sbAdminApp')
                 return this.param.referenceTable && this.param.referenceTable.stringify(item);
             }
             selectByList() {
-                this.Dialog.openWindow(Object.assign({}, this.param.referenceTable.listPage, {
+                this.Dialog.openWindow(this.param.referenceTable.listPage.extend({
                     forSelect: true
                 }))
                     .then((result) => {
