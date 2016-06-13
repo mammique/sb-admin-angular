@@ -426,6 +426,7 @@ function parseSchema(Schema) {
             if (this.records) {
                 this.recordMap = arrayToMap(this.records, this.primaryKey || this.fields[0].name);
             } else {
+                this.records = [];
                 this.recordMap = {};
             }
             this.records.forEach((record) => {
