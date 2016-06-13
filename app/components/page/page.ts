@@ -127,7 +127,7 @@ angular.module('sbAdminApp')
                 if (this.value && this.value[this.param.table.primaryKey]) {
                     this.model = angular.copy(this.param.table.get(this.value[this.param.table.primaryKey]));
                 } else {
-                    this.model = angular.copy(this.value) || this.param.defaultValue();
+                    this.model = Object.assign(angular.copy(this.value) || {}, this.param.defaultValue());
                 }
             }
             $onClose(value) { }//overwriten by bindings
