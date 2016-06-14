@@ -28,7 +28,7 @@ angular.module('sbAdminApp')
                         'default': ['']
                     };
                     const conditionTypes = conditionTypesMap[scope.effectiveParam.searchType] || conditionTypesMap['default'];
-                    const componentName = 'input-' + type + (scope.effectiveParam.searchType === 'multi' ? '-multi': '';
+                    const componentName = 'input-' + type + (scope.effectiveParam.searchType === 'multi' ? '-multi': '');
                     if(scope.effectiveParam.defaultValue && conditionTypes[0] === '') {
                         scope.condition[scope.effectiveParam.name] = scope.effectiveParam.defaultValue();
                     }
