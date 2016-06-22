@@ -175,18 +175,6 @@ input-reference .form-control[disabled], fieldset[disabled] .form-control {
 	outline: none;
 }
 
-.table-striped > tbody > tr.record-info {
-    background-color: #d9edf7;
-}
-.table-striped > tbody > tr.record-success {
-    background-color: #dff0d8;
-}
-.table-striped > tbody > tr.record-warning {
-    background-color: #fcf8e3;
-}
-.table-striped > tbody > tr.record-danger {
-    background-color: #f2dede;
-}
 .input-group{
   width: 200px;
 }

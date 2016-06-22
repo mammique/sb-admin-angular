@@ -535,7 +535,7 @@ function parseSchema(Schema) {
                 this.decoration = function (record) {
                     const decorationName = item.decoration(record, system);
                     if (decorationName) {
-                        return 'record-' + decorationName;
+                        return 'bg-' + decorationName;
                     } else {
                         return '';
                     }
