@@ -4,25 +4,28 @@ const typescript = require('gulp-typescript');
 const sourcemaps = require('gulp-sourcemaps');
 const mergeStream = require('merge-stream');
 const runSequence = require('run-sequence');
-const server = require('gulp-server-livereload');
 const bower = require('gulp-bower');
 const typings = require('typings');
+const browserSync = require("browser-sync").create();
 
 const tsProject = typescript.createProject('tsconfig.json', {
     sortOutput: true
 });
 
 gulp.task('webserver', function () {
-    gulp.src([
-        'app',
-        '!./**/*.ts'
+    browserSync.init({
+        server: {
+            baseDir: "app"
+        },
+        ui: false,
+        port: 9001
+    });
+    gulp.watch([
+        'app/**/*.html',
+        'app/**/*.json',
+        'app/**/*.css'
     ])
-        .pipe(server({
-            livereload: true,
-            fallback: 'index.html',
-            open: true,
-            port: 9001
-        }));
+    .pipe(browserSync.stream())
 });
 
 gulp.task('default', () => {
@@ -33,7 +36,8 @@ gulp.task('ts', () => {
         .pipe(typescript(tsProject));
     return tsResult.js
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./app'));
+        .pipe(gulp.dest('./app'))
+        .pipe(browserSync.stream())
 });
 
 gulp.task('watch.dev', ['ts'], () => {
