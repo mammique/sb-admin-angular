@@ -24,8 +24,9 @@ gulp.task('webserver', function () {
         'app/**/*.html',
         'app/**/*.json',
         'app/**/*.css'
-    ])
-    .pipe(browserSync.stream())
+    ], ()=> {
+        browserSync.reload();
+    })
 });
 
 gulp.task('default', () => {
