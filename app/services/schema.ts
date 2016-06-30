@@ -10,7 +10,7 @@ angular.module('sbAdminApp')
                 urls = decodeURIComponent(query.schemas).split(';');
                 console.log(urls);
             } else {
-                urls = ['./sample.json'];
+                urls = ['./resource/sample.json'];
             }
             this.$promise = Promise.all(
                 urls.map((url) => {
@@ -495,9 +495,8 @@ function parseSchema(Schema) {
             return value;
         }
     }
-
-    class Component {
-        static components: Component[] = [];
+    class Page {
+        static components: Page[] = [];
         type;
         table;
         fields;
@@ -511,10 +510,10 @@ function parseSchema(Schema) {
             if (typeof param === 'string') {
                 return Schema.pages[param];
             } else if (param.page) {
-                const base = Component.create(param.page);
-                return new Component(Object.assign({}, base, param));
+                const base = Page.create(param.page);
+                return new Page(Object.assign({}, base, param));
             } else {
-                return new Component(param);
+                return new Page(param);
             }
         }
         extend(value) {
@@ -524,7 +523,7 @@ function parseSchema(Schema) {
         }
         constructor(item) {
             Object.assign(this, item);
-            Component.components.push(this);
+            Page.components.push(this);
             if (item.decoration) {
                 if (typeof item.decoration !== 'function') {
                     const code = Object.keys(item.decoration).map((decorationName) => {
@@ -586,13 +585,13 @@ function parseSchema(Schema) {
             }) || null;
         }
         static $postLink() {
-            Component.components.forEach((component) => {
+            Page.components.forEach((component) => {
                 component.$postLink();
             });
         }
         $postLink() {
             this.children = this.children && this.children.map((component) => {
-                return Component.create(component);
+                return Page.create(component);
             });
             for (const fieldName of ['pageActions', 'recordActions']) {
                 if (this[fieldName]) {
@@ -627,13 +626,13 @@ function parseSchema(Schema) {
 
     Object.getOwnPropertyNames(Schema.pages).forEach((pageName) => {
         Schema.pages[pageName].name = pageName;
-        Schema.pages[pageName] = Component.create(Schema.pages[pageName]);
+        Schema.pages[pageName] = Page.create(Schema.pages[pageName]);
     });
 
     Schema.menu = Menu.convert(Schema.menu);
 
     Field.$postLink();
-    Component.$postLink();
+    Page.$postLink();
 
 
     Object.getOwnPropertyNames(Schema.tables).forEach((tableName) => {
