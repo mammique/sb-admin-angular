@@ -6,15 +6,21 @@ angular.module('sbAdminApp')
         constructor($http) {
             var query = parseQuery();
             let urls;
+            let sampleMode = false;
             if (query.schemas) {
                 urls = decodeURIComponent(query.schemas).split(';');
                 console.log(urls);
             } else {
-                urls = ['./resource/sample.json'];
+                urls = ['./resource/sample.json', './sample.json'];
+                sampleMode = true;
             }
             this.$promise = Promise.all(
                 urls.map((url) => {
-                    return $http.get(url);
+                    return $http.get(url).catch((e)=> {
+                        if(!sampleMode) {
+                            throw e;
+                        }
+                    });
                 }))
                 .then((responses) => {
                     delete this.$promise;
@@ -28,12 +34,19 @@ angular.module('sbAdminApp')
                         }));
                         return Object.assign.apply(Object, array);
                     }
-                    const Schema = {
+                    function firstObject(array) {
+                        for(let item of array) {
+                            if(item) {
+                                return item;
+                            }
+                        }
+                    }
+                    const Schema = sampleMode ? firstObject(responses).data :  ({
                         tables: concat(responses, 'tables'),
                         pages: concat(responses, 'pages'),
                         menu: concat(responses).menu,
                         common: concat(responses).common,
-                    };
+                    });
                     // メニューがない場合は補完する
                     Schema.menu = Schema.menu || Object.keys(Schema.pages).map((key) => {
                         return {
