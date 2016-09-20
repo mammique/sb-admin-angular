@@ -3,5 +3,10 @@ npm-debug.log
 dist
 .tmp
 .sass-cache
-bower_components
 .idea
+typings
+app/bower_components
+app/resource
+app/**/*.js.map
+app/**/*.js
+!app/lib/angular-ui-bootstrap/*.js

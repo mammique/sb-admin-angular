@@ -1,0 +1,83 @@
+<span role="presentation" class="dropdown pull-right" style="margin-top:-75px">
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-right">
+        <li><a ng-click="$ctrl.action({type: 'previewRecords'})" >Copy Records</a></li>
+    </ul>
+</span>
+<div class="panel panel-default" ng-show="$ctrl.param.searches">
+    <div class="panel-heading">
+        検索
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <form role="form">
+                <ul class="list-inline">
+                    <li class="form-group" ng-repeat="field in $ctrl.param.searches track by $index">
+                        <div>
+                            <label class="control-label">{{field.title}}</label>
+                        </div>
+                        <div>
+                            <search-element type="field.type" condition="$ctrl.conditions" param="field" record="$ctrl.model"></search-element>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default" ng-show="$ctrl.param.sammaries">
+    <div class="panel-heading">
+        集計
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <form role="form">
+                <ul class="list-inline">
+                    <li class="form-group" ng-repeat="field in $ctrl.param.sammaries track by $index">
+                        <div>
+                            <label class="control-label">{{field.title}}</label>
+                        </div>
+                        <div>
+                            <div class="form-control">
+                                {{field.dammyValue}}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button style="margin-right:3px" ng-repeat="action in $ctrl.param.pageActions" ng-click="$ctrl.action(action, $ctrl.value)"
+    type="button" class="btn btn-primary" ng-class="{'btn-danger': action.error}">{{action.error ? 'error': action.title}}</button>
+<div class="glue"></div>
+<div class="dataTable_wrapper">
+    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <thead>
+            <tr>
+                <th ng-repeat="field in $ctrl.param.fields track by $index" ng-style="{'text-align': field.alignment}">
+                    {{field.title}}
+                    <sort-button mode="$ctrl.sortMode" current-field="field.name" selected-field="$ctrl.sortField" ng-if="field.sortable">
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="{{$ctrl.param.decoration(record)}}" ng-repeat="record in $ctrl.records track by $index">
+                <td ng-repeat="field in $ctrl.param.fields" ng-style="{'text-align': field.alignment}">
+                    {{field.stringify(record)}}
+                </td>
+                <td style="padding:3px">
+                    <button style="margin-right:3px" ng-if="$ctrl.param.forSelect" ng-click="$ctrl.select(record)" type="button" class="btn btn-sm btn-primary">選択</button>
+                    <button style="margin-right:3px" ng-repeat="action in $ctrl.param.recordActions" ng-click="$ctrl.action(action, record)"
+                        type="button" ng-class="{'btn-danger': action.error}" class="btn btn-sm btn-primary">{{action.error ? 'error': action.title}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

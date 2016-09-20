@@ -79,5 +79,118 @@ body {
 
 .nav>li.active>a {
 text-decoration: none;
-background-color: #eee;
+background-color: #bee0e8;
+}
+
+.glue{
+  height:8px;
+}
+
+/*@media (min-width: 992px) {*/
+  .modal-wd{
+    position:absolute;
+    top:0;bottom:0;left:0;right:0;
+    width: auto;
+    height:auto;
+  }
+  .modal:nth-child(3n+1) .modal-wd{
+    margin: 20px 40px 40px 20px;
+  }
+  .modal:nth-child(3n+2) .modal-wd{
+    margin: 30px 30px 30px 30px;
+  }
+  .modal:nth-child(3n) .modal-wd{
+    margin: 40px 20px 20px 40px;
+  }
+  .modal-wd .modal-content,
+  .modal-wd .modal-pane{
+    position:absolute;
+    top:0;bottom:0;left:0;right:0;
+    width: auto;
+    height:auto;
+    margin:0;
+  }
+  .modal-open .modal{
+    /*overflow-y:hidden;*/
+  }
+  .modal-wd .modal-pane{
+    top:30px;
+  }
+  .modal-open .modal .modal-wd .modal-pane{
+    overflow-y:auto;
+    padding: 0px 20px 20px 20px;
+  }
+/*}*/
+
+
+.page-header{
+  margin-top: 20px;
+}
+
+.modal .page-header{
+  margin-top: 0 ;
+}
+
+
+.modal .modal-close-button-wrapper{
+  position:absolute;
+  top:-1.2em;
+  left:-0.7em;
+  height:4em;
+  width:4em;
+  border-radius:2em;
+  background-color: #fff;
+}
+.modal .modal-close-button{
+  font-size:1.5em;
+  width:1.5em;
+  height:1.5em;
+  color: #333;
+  border: 0;
+  background-color: transparent;
+  display: inline-block;
+  padding: 2px 6px 3px;
+  position: absolute;
+  top: -0.2em;
+  left: -0.2em;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  outline: none;
+}
+
+[ng-click] {
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 5px;/* default 5px*/
+}
+
+input-reference .form-control[disabled], fieldset[disabled] .form-control {
+  cursor: default;
+}
+
+.uib-datepicker-popup.dropdown-menu > li > div > table:focus {
+	outline: none;
+}
+
+.input-group{
+  width: 200px;
+}
+div.form-control{
+  width:200px;
+}
+.list-inline > li {
+  vertical-align: top;
+}
+.list-inline {
+  margin-left:5px;
+}
+
+.chosen-container-single .chosen-single{
+  height: 34px;
+}
+.chosen-container-single .chosen-single > *{
+  margin-top: 4px;
 }

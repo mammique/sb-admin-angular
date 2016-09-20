@@ -1,0 +1,26 @@
+<button style="margin-right:3px" ng-repeat="action in $ctrl.param.pageActions" ng-click="$ctrl.action(action, $ctrl.value)"
+    type="button" class="btn btn-primary" ng-class="{'btn-danger': action.error}">{{action.error ? 'error': action.title}}</button>
+
+<div class="glue"></div>
+
+<div class="panel panel-default" ng-repeat="fieldGroup in $ctrl.param.fieldGroups track by $index">
+    <div class="panel-heading" ng-if="fieldGroup.title">
+        {{fieldGroup.title}}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <form role="form">
+                <ul class="list-inline">
+                    <li class="form-group" ng-repeat="field in fieldGroup.fields track by $index">
+                        <div>
+                            <label class="control-label">{{field.title}}</label>
+                        </div>
+                        <div>
+                            <input-element type="field.type" value="$ctrl.model[field.name]" param="field" record="$ctrl.model"></input-element>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
